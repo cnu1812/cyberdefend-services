@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-darkBg text-lightGray antialiased font-sans;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #121212; 
+}
+::-webkit-scrollbar-thumb {
+  background: #0A192F; 
+  border: 1px solid #00FF9F;
+  border-radius: 4px;
+}
+
+/* Utility for glass panels matching your theme */
+.cyber-card {
+  @apply bg-primary/40 backdrop-blur-md border border-accent/20 hover:border-accent/60 transition-all duration-300;
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(0, 255, 159, 0.5);
+}
