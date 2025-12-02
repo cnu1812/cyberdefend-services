@@ -11,7 +11,7 @@ const jobs = [
     id: "OP-RED-01",
     title: "Senior Penetration Tester",
     dept: "Red Team",
-    location: "Remote / Hybrid",
+    location: "Remote",
     type: "Full-Time",
     desc: "Execute complex attack simulations against high-value targets. Requires mastery of Burp Suite, Cobalt Strike, and manual exploitation."
   },
@@ -19,7 +19,7 @@ const jobs = [
     id: "OP-BLUE-04",
     title: "SOC Analyst (L2)",
     dept: "Blue Team",
-    location: "Hyderabad (HQ)",
+    location: "Remote",
     type: "Rotational Shift",
     desc: "Monitor SIEM alerts, hunt threats, and contain active breaches in real-time. You are the first line of defense."
   },
@@ -43,7 +43,7 @@ const Careers = () => {
     submit({
       name: formData.name,
       email: formData.email,
-      service: `CAREER_APP: ${selectedJob}`, // Tag it as a Job Application
+      service: `CAREER_APP: ${selectedJob}`, 
       message: `LinkedIn: ${formData.linkedin} | Portfolio: ${formData.portfolio}`
     });
   };

@@ -10,6 +10,8 @@ import ScrollToTop from './components/ScrollToTop';
 import SmoothScroll from './components/SmoothScroll';
 import CyberScrollbar from './components/CyberScrollbar';
 import Careers from './pages/Careers';
+import CaseStudies from './pages/CaseStudies';
+import ServiceTerminal from './components/ServiceTerminal';
 
 // Pages
 import Home from './pages/Home';
@@ -43,6 +45,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/casestudies" element={<CaseStudies />} />
               <Route path="/careers" element={<Careers />} />
             </Routes>
           </main>
@@ -50,7 +53,7 @@ function App() {
           <Footer />
         </div>
       )}
-
+<ServiceTerminal />
     </BrowserRouter>
   );
 }
