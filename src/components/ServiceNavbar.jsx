@@ -40,6 +40,7 @@ const ServiceNavbar = () => {
   <Link to="/" className="hover:text-accent transition">Home</Link>
   {/* Scroll links only work on Home, otherwise redirect to Home */}
   <a href="/#services" className="hover:text-accent transition">Services</a>
+  <Link to="/careers" className="hover:text-accent transition">Careers</Link>
   <a href="/#process" className="hover:text-accent transition">Methodology</a>
 
   <Link 

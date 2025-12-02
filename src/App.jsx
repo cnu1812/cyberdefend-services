@@ -9,6 +9,7 @@ import SplashScreen from './components/SplashScreen';
 import ScrollToTop from './components/ScrollToTop';
 import SmoothScroll from './components/SmoothScroll';
 import CyberScrollbar from './components/CyberScrollbar';
+import Careers from './pages/Careers';
 
 // Pages
 import Home from './pages/Home';
@@ -42,6 +43,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/careers" element={<Careers />} />
             </Routes>
           </main>
 
