@@ -146,7 +146,7 @@ const FinalCTA = () => {
             {/* Action Buttons (Right) */}
             <div className="flex flex-col gap-4 w-full md:w-auto">
               <a 
-                href="mailto:contact@cyberdefend.in" 
+                href="mailto:support@cyberdefend.in" 
                 className="flex items-center justify-center gap-3 bg-accent text-darkBg px-8 py-4 text-lg font-bold rounded hover:bg-white hover:scale-105 transition-all shadow-[0_0_20px_rgba(0,255,159,0.4)] group/btn"
               >
                 <Mail size={20} /> 

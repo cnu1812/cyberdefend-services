@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import NavbarLogo from './NavbarLogo'; // <--- Import the new logo
+import NavbarLogo from './NavbarLogo'; 
+import { Link, useLocation } from 'react-router-dom';
 
 const ServiceNavbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -36,15 +37,18 @@ const ServiceNavbar = () => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-lightGray">
-          <a href="#services" className="hover:text-accent transition">Services</a>
-          <a href="#process" className="hover:text-accent transition">Methodology</a>
-          <a 
-            href="mailto:contact@cyberdefend.in" 
-            className="px-5 py-2.5 bg-accent text-darkBg font-bold rounded-sm hover:bg-white transition-all shadow-[0_0_10px_rgba(0,255,159,0.3)]"
-          >
-            Get Quote
-          </a>
-        </div>
+  <Link to="/" className="hover:text-accent transition">Home</Link>
+  {/* Scroll links only work on Home, otherwise redirect to Home */}
+  <a href="/#services" className="hover:text-accent transition">Services</a>
+  <a href="/#process" className="hover:text-accent transition">Methodology</a>
+
+  <Link 
+    to="/contact" 
+    className="px-5 py-2.5 bg-accent text-darkBg font-bold rounded-sm hover:bg-white transition-all shadow-[0_0_10px_rgba(0,255,159,0.3)]"
+  >
+    Contact HQ
+  </Link>
+</div>
 
         {/* Mobile Toggle */}
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-white hover:text-accent">

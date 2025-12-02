@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Server, FileCheck, Globe, Code, Users, ArrowRight, Activity, Terminal, X, Send, Lock } from 'lucide-react';
+import { Search, Server, FileCheck, Globe, Code, Users, ArrowRight, Activity, Terminal, X, Send, Lock, CheckCircle } from 'lucide-react';
+import { useFormSubmit } from '../hooks/useFormSubmit';
+
+// --- CONFIGURATION ---
+// ⚠️ REPLACE THIS WITH YOUR GOOGLE SCRIPT URL
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzrJjQEWWoCQBo0rqWdrKx9MozLM1q4qXl60oKFIARD8gVkZ6pN3qulIrbo1PrZkJr/exec";
 
 const services = [
   {
@@ -80,15 +85,41 @@ const services = [
 const ServiceArsenal = () => {
   const [activeId, setActiveId] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false); // For the "Initializing..." fake loading
+
+  // --- FORM LOGIC ---
+  const { status, submit, setStatus } = useFormSubmit(SCRIPT_URL);
+  
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
 
   const handleInitialize = () => {
-    setIsLoading(true);
+    setIsInitializing(true);
     // Fake loading delay for "Cyber" feel
     setTimeout(() => {
-      setIsLoading(false);
+      setIsInitializing(false);
       setIsModalOpen(true);
+      // Reset form state when opening
+      setFormData({ name: '', email: '', message: '' });
+      setStatus('idle');
     }, 800);
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    submit({
+        name: formData.name,
+        email: formData.email,
+        service: `Service Interest: ${services[activeId].title}`, // Auto-attach the active service name
+        message: formData.message || "No specific message provided."
+    });
   };
 
   return (
@@ -213,10 +244,10 @@ const ServiceArsenal = () => {
                      </div>
                      <button 
                         onClick={handleInitialize}
-                        disabled={isLoading}
+                        disabled={isInitializing}
                         className="flex items-center gap-2 bg-accent text-darkBg px-8 py-3 font-bold hover:bg-white transition-colors group/btn disabled:opacity-50 disabled:cursor-wait"
                      >
-                        {isLoading ? (
+                        {isInitializing ? (
                           <span className="flex items-center gap-2 animate-pulse">Establishing Connection...</span>
                         ) : (
                           <>Initialize Protocol <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" /></>
@@ -245,7 +276,7 @@ const ServiceArsenal = () => {
             >
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-4 right-4 text-gray-500 hover:text-white"
+                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
               >
                 <X size={24} />
               </button>
@@ -258,31 +289,83 @@ const ServiceArsenal = () => {
                 <p className="text-gray-400 mt-2 text-sm">Fill out the brief below to deploy Cyberdefend assets.</p>
               </div>
 
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                <div>
-                  <label className="block text-xs font-mono text-gray-500 mb-1">AGENT_NAME / COMPANY</label>
-                  <input type="text" className="w-full bg-darkBg border border-white/10 p-3 text-white focus:border-accent focus:outline-none transition-colors" placeholder="e.g. CorpSecurity Inc." />
+              {/* SUCCESS STATE */}
+              {status === 'success' ? (
+                <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 text-accent">
+                        <CheckCircle size={32} />
+                    </div>
+                    <div className="text-accent text-xl font-bold mb-2">Transmission Received</div>
+                    <p className="text-sm text-gray-400 mb-6">Our agents have logged your request. We will initiate contact shortly.</p>
+                    <button 
+                        type="button" 
+                        onClick={() => { setIsModalOpen(false); setStatus('idle'); }} 
+                        className="px-6 py-2 bg-white/10 text-white rounded hover:bg-white/20 transition-colors"
+                    >
+                        Close Uplink
+                    </button>
                 </div>
-                
-                <div>
-                  <label className="block text-xs font-mono text-gray-500 mb-1">COMMUNICATION_LINK (EMAIL)</label>
-                  <input type="email" className="w-full bg-darkBg border border-white/10 p-3 text-white focus:border-accent focus:outline-none transition-colors" placeholder="security@company.com" />
-                </div>
+              ) : (
+                /* FORM STATE */
+                <form className="space-y-4" onSubmit={handleFormSubmit}>
+                    <div>
+                        <label className="block text-xs font-mono text-gray-500 mb-1">AGENT_NAME / COMPANY</label>
+                        <input 
+                            required 
+                            name="name" 
+                            value={formData.name}
+                            onChange={handleInputChange} 
+                            type="text" 
+                            className="w-full bg-darkBg border border-white/10 p-3 text-white focus:border-accent focus:outline-none transition-colors" 
+                            placeholder="e.g. CorpSecurity Inc." 
+                        />
+                    </div>
+                    
+                    <div>
+                        <label className="block text-xs font-mono text-gray-500 mb-1">COMMUNICATION_LINK (EMAIL)</label>
+                        <input 
+                            required 
+                            name="email" 
+                            value={formData.email}
+                            onChange={handleInputChange} 
+                            type="email" 
+                            className="w-full bg-darkBg border border-white/10 p-3 text-white focus:border-accent focus:outline-none transition-colors" 
+                            placeholder="security@company.com" 
+                        />
+                    </div>
 
-                <div>
-                  <label className="block text-xs font-mono text-gray-500 mb-1">MISSION_OBJECTIVES</label>
-                  <textarea className="w-full bg-darkBg border border-white/10 p-3 text-white focus:border-accent focus:outline-none transition-colors h-24" placeholder="Briefly describe your requirements..." defaultValue={`Interested in ${services[activeId].title}...`}></textarea>
-                </div>
+                    <div>
+                        <label className="block text-xs font-mono text-gray-500 mb-1">MISSION_OBJECTIVES</label>
+                        <textarea 
+                            name="message" 
+                            value={formData.message}
+                            onChange={handleInputChange} 
+                            className="w-full bg-darkBg border border-white/10 p-3 text-white focus:border-accent focus:outline-none transition-colors h-24" 
+                            placeholder={`Interested in ${services[activeId].title}...`}
+                        ></textarea>
+                    </div>
 
-                <button className="w-full bg-accent text-darkBg font-bold py-4 mt-4 hover:bg-white transition-colors flex justify-center items-center gap-2 group">
-                   <Send size={18} className="group-hover:translate-x-1 transition-transform" /> 
-                   TRANSMIT REQUEST
-                </button>
-                
-                <p className="text-center text-[10px] text-gray-600 mt-4">
-                  Transmission is encrypted end-to-end. We respond within 2400 cycles (24h).
-                </p>
-              </form>
+                    <button 
+                        disabled={status === 'loading'} 
+                        className="w-full bg-accent text-darkBg font-bold py-4 mt-4 hover:bg-white transition-colors flex justify-center items-center gap-2 group disabled:opacity-50 disabled:cursor-wait"
+                    >
+                        {status === 'loading' ? (
+                            'ENCRYPTING & SENDING...' 
+                        ) : (
+                            <><Send size={18} className="group-hover:translate-x-1 transition-transform" /> TRANSMIT REQUEST</>
+                        )}
+                    </button>
+                    
+                    {status === 'error' && (
+                        <p className="text-red-500 text-center text-sm">Transmission Failed. Please check connection.</p>
+                    )}
+                    
+                    <p className="text-center text-[10px] text-gray-600 mt-4">
+                        Transmission is encrypted end-to-end. We respond within 2400 cycles (24h).
+                    </p>
+                </form>
+              )}
+
             </motion.div>
           </div>
         )}

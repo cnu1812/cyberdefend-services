@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, ShieldCheck, Activity, Target } from 'lucide-react';
+import { Link } from 'react-router-dom'; // <--- Import Link
+import { ArrowRight, ShieldCheck, Activity, Target, Download, FileText } from 'lucide-react';
 
 // The script data to simulate
 const terminalData = [
@@ -19,12 +20,13 @@ const terminalData = [
   { text: "[+] SUCCESS: Root Access Granted", color: "text-white bg-green-600/20 inline-block px-1" },
   { text: "[*] Generating Executive Report...", color: "text-blue-400" },
   { text: "[+] Patch Verified. System Secured.", color: "text-green-500 font-bold" },
-  { text: "root@cyberdefend:~# ", color: "text-accent" }, // Idle state
+  { text: "root@cyberdefend:~# ", color: "text-accent" }, 
 ];
 
 const ServiceHero = () => {
   const [logs, setLogs] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDownloading, setIsDownloading] = useState(false);
   const scrollRef = useRef(null);
 
   // Dynamic Typing Logic
@@ -33,15 +35,14 @@ const ServiceHero = () => {
       const timeout = setTimeout(() => {
         setLogs((prev) => [...prev, terminalData[currentIndex]]);
         setCurrentIndex((prev) => prev + 1);
-      }, Math.random() * 600 + 200); // Random delay between 200ms and 800ms for realism
+      }, Math.random() * 600 + 200); 
 
       return () => clearTimeout(timeout);
     } else {
-      // Reset after a pause to loop the animation
       const resetTimeout = setTimeout(() => {
         setLogs([]);
         setCurrentIndex(0);
-      }, 5000); // Wait 5 seconds before restarting
+      }, 5000); 
       return () => clearTimeout(resetTimeout);
     }
   }, [currentIndex]);
@@ -53,24 +54,32 @@ const ServiceHero = () => {
     }
   }, [logs]);
 
+  // --- NEW: Handle Sample Report Download ---
+  const handleDownloadReport = () => {
+    setIsDownloading(true);
+    // Simulate a secure retrieval process
+    setTimeout(() => {
+      setIsDownloading(false);
+      // Replace this URL with your actual PDF path in the public folder later
+      // e.g., "/assets/CyberDefend_Sample_Report.pdf"
+      window.open("https://www.orioninc.com/media/270f3s4p/sample-penetration-testing-report.pdf", "_blank"); 
+    }, 1500);
+  };
+
   return (
     <section className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden bg-darkBg">
       
       {/* --- 1. THE RADAR BACKGROUND --- */}
       <div className="absolute inset-0 overflow-hidden flex items-center justify-center pointer-events-none">
         <div className="relative w-[800px] h-[800px] opacity-30">
-           {/* Concentric Circles */}
            <div className="absolute inset-0 border border-accent/20 rounded-full"></div>
            <div className="absolute inset-[150px] border border-accent/20 rounded-full"></div>
            <div className="absolute inset-[300px] border border-accent/20 rounded-full"></div>
-           {/* Crosshairs */}
            <div className="absolute top-1/2 left-0 w-full h-[1px] bg-accent/10"></div>
            <div className="absolute left-1/2 top-0 h-full w-[1px] bg-accent/10"></div>
-           {/* THE SCANNER SWEEP */}
            <div className="absolute inset-0 rounded-full animate-spin-slow">
              <div className="w-full h-full bg-[conic-gradient(transparent_270deg,rgba(0,255,159,0.2)_360deg)] rounded-full blur-xl"></div>
            </div>
-           {/* Blips */}
            <div className="absolute top-32 left-48 w-2 h-2 bg-accent rounded-full animate-pulse shadow-[0_0_10px_#00FF9F]"></div>
            <div className="absolute bottom-40 right-52 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
         </div>
@@ -96,11 +105,25 @@ const ServiceHero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-8 py-4 bg-accent text-darkBg font-bold text-lg rounded-sm hover:bg-white transition-all shadow-[0_0_20px_rgba(0,255,159,0.4)] flex items-center justify-center gap-2">
-              Book Penetration Test <ArrowRight size={20} />
-            </button>
-            <button className="px-8 py-4 bg-transparent border border-accent/50 text-accent font-bold text-lg rounded-sm hover:bg-accent/10 transition-all flex items-center justify-center gap-2">
-              View Sample Report
+            {/* BUTTON 1: Link to Contact Page */}
+            <Link 
+              to="/contact" 
+              className="px-8 py-4 bg-accent text-darkBg font-bold text-lg rounded-sm hover:bg-white transition-all shadow-[0_0_20px_rgba(0,255,159,0.4)] flex items-center justify-center gap-2 group"
+            >
+              Book Penetration Test <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            {/* BUTTON 2: Fake Download Handler */}
+            <button 
+              onClick={handleDownloadReport}
+              disabled={isDownloading}
+              className="px-8 py-4 bg-transparent border border-accent/50 text-accent font-bold text-lg rounded-sm hover:bg-accent/10 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-wait"
+            >
+              {isDownloading ? (
+                <>Retrieving File <span className="animate-pulse">...</span></>
+              ) : (
+                <>View Sample Report <FileText size={20} /></>
+              )}
             </button>
           </div>
         </motion.div>

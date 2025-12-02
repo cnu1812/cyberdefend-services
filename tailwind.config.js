@@ -18,6 +18,7 @@ export default {
           'slide-right': 'slideRight 0.5s ease-out',
           'slide-left': 'slideLeft 0.5s ease-out',
           scroll: 'scroll 30s linear infinite',
+          'opacity-in': 'opacityIn 1s ease-in-out forwards',
           
           // NEW: The Radar Spin Animation
           'spin-slow': 'spin 4s linear infinite', 
@@ -25,6 +26,10 @@ export default {
         },
         keyframes: {
           // ... (keep your existing keyframes for slideUp, scroll, etc.) ...
+          opacityIn: {
+            '0%': { opacity: '0' },
+            '100%': { opacity: '1' }
+          },
           slideUp: {
             '0%': { transform: 'translateY(100%)', opacity: '0' },
             '100%': { transform: 'translateY(0)', opacity: '1' }

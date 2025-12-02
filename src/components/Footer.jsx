@@ -39,7 +39,7 @@ const Footer = () => {
                 { name: "Academy", path: "https://academy.cyberdefend.in" },
                 { name: "Services", path: "#services" },
                 { name: "Process", path: "#process" },
-                { name: "Contact", path: "mailto:contact@cyberdefend.in" },
+                { name: "Contact", path: "mailto:support@cyberdefend.in" },
                 { name: "Community", path: "https://chat.whatsapp.com/LRzT7qWKvWGKlQIoElqYbF" },
               ].map((link, index) => (
                 <motion.a

@@ -1,28 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Import Router
+import { AnimatePresence } from 'framer-motion';
+
+// Components
 import ServiceNavbar from './components/ServiceNavbar';
-import ServiceHero from './components/ServiceHero';
-import ComplianceTicker from './components/ComplianceTicker';
-import ProcessRoadmap from './components/ProcessRoadmap';
-import ServiceArsenal from './components/ServiceArsenal';
-import FinalCTA from './components/FinalCTA';
-import Footer from './components/Footer'; // <--- Import the new Footer
+import Footer from './components/Footer';
+import SplashScreen from './components/SplashScreen';
+import ScrollToTop from './components/ScrollToTop';
+import SmoothScroll from './components/SmoothScroll';
+import CyberScrollbar from './components/CyberScrollbar';
+
+// Pages
+import Home from './pages/Home';
+import Contact from './pages/Contact';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
-    <div className="bg-darkBg text-lightGray font-sans min-h-screen selection:bg-accent selection:text-darkBg">
-      <ServiceNavbar />
-      <main>
-        <ServiceHero />
-        <ComplianceTicker />
-        <ProcessRoadmap />
-        <ServiceArsenal />
-        <FinalCTA />
-        
-        {/* Use the component here */}
-        <Footer />
-        
-      </main>
-    </div>
+    // 1. The Router MUST wrap everything
+    <BrowserRouter>
+      
+      <SmoothScroll />
+      <ScrollToTop />
+      
+      {/* 2. Splash Screen Logic */}
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <SplashScreen onComplete={() => setIsLoading(false)} />
+        )}
+      </AnimatePresence>
+
+      {/* 3. Main Website (Only renders after loading) */}
+      {!isLoading && (
+        <div className="bg-darkBg text-lightGray font-sans min-h-screen selection:bg-accent selection:text-darkBg animate-opacity-in flex flex-col">
+          
+          <CyberScrollbar />
+          <ServiceNavbar />
+          
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
+          </main>
+
+          <Footer />
+        </div>
+      )}
+
+    </BrowserRouter>
   );
 }
 
