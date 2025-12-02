@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Terminal, Minus, Square, Activity, Command } from 'lucide-react'; // Added Command icon
+import { X, Terminal, Minus, Square, Activity, Command } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,11 +16,11 @@ const ServiceTerminal = () => {
   const bottomRef = useRef(null);
   const navigate = useNavigate();
 
-  // --- KEYBOARD SHORTCUT (Ctrl+K) ---
+  // --- KEYBOARD SHORTCUT (Desktop Only) ---
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault(); // Prevent browser's default search bar
+        e.preventDefault();
         setIsOpen((prev) => !prev);
       }
     };
@@ -144,7 +144,6 @@ const ServiceTerminal = () => {
           newHistory.push({ type: 'system', content: '  clear    - Clear terminal buffer' });
           break;
         
-        // --- NAVIGATION COMMANDS ---
         case 'home':
           newHistory.push({ type: 'success', content: 'Redirecting to Main Hub...' });
           setTimeout(() => window.location.href = 'https://cyberdefend.in', 1000);
@@ -197,15 +196,16 @@ const ServiceTerminal = () => {
 
   return (
     <>
-      {/* TRIGGER BUTTON - Fixed Bottom Left */}
+      {/* TRIGGER BUTTON - RESPONSIVE */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 left-6 z-50 p-3 bg-primary/90 backdrop-blur border border-accent/30 rounded-sm text-accent hover:bg-accent/20 hover:border-accent hover:shadow-[0_0_20px_rgba(0,255,159,0.3)] transition-all group flex items-center gap-3"
-        title="Open Admin Console (Ctrl+K)"
+        className="fixed bottom-6 left-6 z-50 p-2 md:p-3 bg-primary/90 backdrop-blur border border-accent/30 rounded-sm text-accent hover:bg-accent/20 hover:border-accent hover:shadow-[0_0_20px_rgba(0,255,159,0.3)] transition-all group flex items-center gap-3"
+        title="Open Admin Console"
       >
-        <Terminal size={24} />
+        <Terminal size={20} className="md:w-6 md:h-6" />
         
-        <div className="flex flex-col items-start">
+        {/* Text Hidden on Mobile, Visible on Desktop */}
+        <div className="hidden md:flex flex-col items-start">
           <span className="text-[10px] font-mono text-accent/70 tracking-widest uppercase group-hover:text-accent">
             System Console
           </span>
@@ -224,13 +224,14 @@ const ServiceTerminal = () => {
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="w-full max-w-3xl bg-[#050C16] border border-accent/30 rounded-sm shadow-2xl overflow-hidden flex flex-col h-[500px] relative"
+              // Responsive Height: 60vh on Mobile, 500px on Desktop
+              className="w-full max-w-3xl bg-[#050C16] border border-accent/30 rounded-sm shadow-2xl overflow-hidden flex flex-col h-[60vh] md:h-[500px] relative"
             >
               {/* Window Bar */}
               <div className="bg-[#0A192F] px-4 py-2 flex justify-between items-center border-b border-accent/20 select-none">
                 <div className="flex gap-2 items-center text-accent text-xs tracking-widest">
                   <Activity size={14} className="animate-pulse" />
-                  <span>SECURE_SHELL :: ADMIN_ACCESS</span>
+                  <span className="hidden sm:inline">SECURE_SHELL :: </span>ADMIN
                 </div>
                 <div className="flex gap-3">
                    <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-red-500 transition-colors"><X size={16}/></button>
@@ -251,7 +252,7 @@ const ServiceTerminal = () => {
                     <div 
                         key={i} 
                         onClick={line.action}
-                        className={`text-sm tracking-wide ${line.action ? 'cursor-pointer hover:underline' : ''} ${
+                        className={`text-xs md:text-sm tracking-wide break-words ${line.action ? 'cursor-pointer hover:underline' : ''} ${
                             line.type === 'error' ? 'text-red-500' : 
                             line.type === 'success' ? 'text-green-400' : 
                             line.type === 'warning' ? 'text-yellow-400' : 
@@ -266,14 +267,14 @@ const ServiceTerminal = () => {
                     
                     {!isBooting && (
                     <div className="flex items-center gap-2 text-accent mt-2">
-                        <span className="font-bold">admin@cyberdefend:~$</span>
+                        <span className="font-bold text-xs md:text-sm">admin:~$</span>
                         <input
                         ref={inputRef}
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={handleCommand}
-                        className="flex-1 bg-transparent border-none outline-none text-white focus:ring-0 p-0 text-sm caret-accent"
+                        className="flex-1 bg-transparent border-none outline-none text-white focus:ring-0 p-0 text-xs md:text-sm caret-accent"
                         autoFocus
                         spellCheck="false"
                         autoComplete="off"
