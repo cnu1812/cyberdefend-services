@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Import Router
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; 
 import { AnimatePresence } from 'framer-motion';
 
 // Components
@@ -12,6 +12,7 @@ import CyberScrollbar from './components/CyberScrollbar';
 import Careers from './pages/Careers';
 import CaseStudies from './pages/CaseStudies';
 import ServiceTerminal from './components/ServiceTerminal';
+import SEO from './components/SEO';
 
 // Pages
 import Home from './pages/Home';
@@ -37,7 +38,12 @@ function App() {
       {/* 3. Main Website (Only renders after loading) */}
       {!isLoading && (
         <div className="bg-darkBg text-lightGray font-sans min-h-screen selection:bg-accent selection:text-darkBg animate-opacity-in flex flex-col">
-          
+          <SEO 
+        title="CyberDefend Services | Enterprise VAPT & Compliance"
+        description="Top-tier VAPT, Red Teaming, and Cloud Security audits for high-growth startups. ISO 27001 & SOC 2 readiness. Book a free security audit."
+        keywords="Cyber Defend Services, CyberDefend B2B, VAPT Services India, Startup Security, Red Teaming, ISO 27001 Consultant, Cyber Security Agency"
+        url="https://services.cyberdefend.in"
+      />
           <CyberScrollbar />
           <ServiceNavbar />
           
