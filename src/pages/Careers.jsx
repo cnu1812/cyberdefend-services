@@ -30,6 +30,14 @@ const jobs = [
     location: "Remote",
     type: "Contract",
     desc: "Design zero-trust architectures for cloud-native startups. Experience with AWS/Azure security & ISO 27001 required."
+  },
+  {
+    id: "OP-SEC-03",
+    title: "Associate Security Consultant",
+    dept: "Services",
+    location: "Remote (India)",
+    type: "Full-time",
+    desc: "Support VAPT engagements, perform cloud security audits, and assist with compliance readiness (SOC2/ISO) for global clients. 1-2 years experience in offensive security or GRC."
   }
 ];
 
